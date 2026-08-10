@@ -13,10 +13,18 @@ var _coyote_timer := 0.0
 const JUMP_BUFFER_TIME := 0.12
 var _jump_buffer_timer := 0.0
 
+# --- Health ---
+const MAX_HP := 100
+var hp := MAX_HP
+
+const INVINCIBILITY_TIME := 1.5  # seconds of i-frames after a hit
+var _invincible_timer := 0.0
+
 @onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 
 func _ready() -> void:
+	add_to_group("player")
 	_setup_animations()
 
 
@@ -51,6 +59,14 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0.0, SPEED)
 
 	move_and_slide()
+
+	# --- Invincibility timer + flash ---
+	if _invincible_timer > 0.0:
+		_invincible_timer -= delta
+		var flash := fmod(_invincible_timer, 0.2) < 0.1
+		_sprite.modulate.a = 0.25 if flash else 1.0
+	else:
+		_sprite.modulate.a = 1.0
 
 	# --- Flip and animation (after move_and_slide so is_on_floor is up-to-date) ---
 	_update_animation(direction)
@@ -90,6 +106,19 @@ func _setup_animations() -> void:
 
 	_sprite.sprite_frames = frames
 	_sprite.play("idle")
+
+
+# ---------------------------------------------------------------------------
+# Health / damage
+# ---------------------------------------------------------------------------
+
+func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> void:
+	if _invincible_timer > 0.0:
+		return
+	hp = maxi(hp - amount, 0)
+	if knockback != Vector2.ZERO:
+		velocity = knockback
+	_invincible_timer = INVINCIBILITY_TIME
 
 
 func _add_anim(frames: SpriteFrames, anim: String, path: String,
