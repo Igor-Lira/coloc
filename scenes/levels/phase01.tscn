@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://s3hmmpr78y7"]
+
+[ext_resource type="Texture2D" uid="uid://dig40ixof3t55" path="res://assets/backgrounds/room.png" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(1400, 150)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_couch"]
+size = Vector2(600, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_table"]
+size = Vector2(255, 18)
+
+[node name="Phase01" type="Node2D"]
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("1")
+centered = false
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(597, 855)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="Couch" type="StaticBody2D" parent="."]
+position = Vector2(878, 699)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Couch"]
+shape = SubResource("RectangleShape2D_couch")
+
+[node name="CoffeeTable" type="StaticBody2D" parent="."]
+position = Vector2(532, 739)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CoffeeTable"]
+shape = SubResource("RectangleShape2D_table")
+
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(250, 734)
