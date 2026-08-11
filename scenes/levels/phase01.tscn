@@ -1,15 +1,28 @@
-[gd_scene load_steps=7 format=3 uid="uid://s3hmmpr78y7"]
+[gd_scene load_steps=12 format=3 uid="uid://s3hmmpr78y7"]
 
 [ext_resource type="Texture2D" uid="uid://dig40ixof3t55" path="res://assets/backgrounds/room.png" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/carl.tscn" id="3"]
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/ui/story_intro.tscn" id="5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(1400, 150)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_couch"]
-size = Vector2(600, 28)
+size = Vector2(85, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_left_platform"]
+size = Vector2(67.75, 12.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_table"]
+size = Vector2(261.5, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_side_wall"]
+size = Vector2(40, 950)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ceiling"]
+size = Vector2(1300, 40)
 
 [node name="Phase01" type="Node2D"]
 
@@ -29,13 +42,52 @@ position = Vector2(878, 699)
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Couch"]
+position = Vector2(281, -55)
 shape = SubResource("RectangleShape2D_couch")
+
+[node name="LeftPlatform" type="StaticBody2D" parent="."]
+position = Vector2(80, 695)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftPlatform"]
+position = Vector2(-49.875, -20)
+shape = SubResource("RectangleShape2D_left_platform")
+
+[node name="Table" type="StaticBody2D" parent="."]
+position = Vector2(272, 600)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Table"]
+position = Vector2(33.25, 0)
+shape = SubResource("RectangleShape2D_table")
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(-20, 448)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("RectangleShape2D_side_wall")
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(1215, 448)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("RectangleShape2D_side_wall")
+
+[node name="Ceiling" type="StaticBody2D" parent="."]
+position = Vector2(597, -20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ceiling"]
+shape = SubResource("RectangleShape2D_ceiling")
 
 [node name="Player" parent="." instance=ExtResource("2")]
 position = Vector2(250, 713)
 
 [node name="Carl" parent="." instance=ExtResource("3")]
-position = Vector2(850, 720)
+position = Vector2(1058, 110)
 
 [node name="HUD" type="CanvasLayer" parent="."]
 script = ExtResource("4")
+
+[node name="StoryIntro" parent="." instance=ExtResource("5")]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
