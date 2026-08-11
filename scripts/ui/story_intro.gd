@@ -2,7 +2,7 @@ extends CanvasLayer
 
 signal phase_started
 
-const LINES: Array[String] = [
+@export var lines: Array[String] = [
 	"Ce personnage s'appelle Florian. Il ressemble un peu à Ryan Gosling... mais c'est surtout parce que c'était plus facile de trouver un sprite de Ryan Gosling que d'en dessiner un nouveau. Quoiqu'il en soit, il a besoin de se reposer.",
 	"Il s'est endormi sur le canapé en regardant le Tour de France, mais une sale race refuse de le laisser tranquille...",
 	"Voyons un peu de quoi Florian est capable, même si personnellement, je n'y crois pas trop.",
@@ -75,7 +75,7 @@ func _process(delta: float) -> void:
 	if not _typing:
 		return
 	_char_progress += CHARS_PER_SECOND * delta
-	var total := LINES[_line_index].length()
+	var total := lines[_line_index].length()
 	_label.visible_characters = mini(int(_char_progress), total)
 	if _label.visible_characters >= total:
 		_typing = false
@@ -83,7 +83,7 @@ func _process(delta: float) -> void:
 
 func _show_line(index: int) -> void:
 	_line_index = index
-	_label.text = LINES[index]
+	_label.text = lines[index]
 	_char_progress = 0.0
 	_label.visible_characters = 0
 	_typing = true
@@ -92,12 +92,12 @@ func _show_line(index: int) -> void:
 
 func _on_ok_pressed() -> void:
 	if _typing:
-		_char_progress = LINES[_line_index].length()
-		_label.visible_characters = LINES[_line_index].length()
+		_char_progress = lines[_line_index].length()
+		_label.visible_characters = lines[_line_index].length()
 		_typing = false
 		return
 
-	if _line_index < LINES.size() - 1:
+	if _line_index < lines.size() - 1:
 		_show_line(_line_index + 1)
 	else:
 		_finish()

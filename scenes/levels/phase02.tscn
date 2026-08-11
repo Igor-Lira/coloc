@@ -1,0 +1,110 @@
+[gd_scene load_steps=15 format=3 uid="uid://b8fhsrlxbhj7q"]
+
+[ext_resource type="Texture2D" uid="uid://cw0f0quswqrwq" path="res://assets/backgrounds/kitchen.png" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/jules.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/macron.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/trump.tscn" id="4"]
+[ext_resource type="Script" path="res://scripts/ui/hud_phase02.gd" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/ui/story_intro_phase02.tscn" id="6"]
+[ext_resource type="Script" path="res://scripts/levels/random_jules_audio.gd" id="7"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_4wexp"]
+a = Vector2(-509, -184)
+b = Vector2(501, 27)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_side_wall"]
+size = Vector2(40, 850)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ceiling"]
+size = Vector2(1100, 40)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_xofld"]
+b = Vector2(182, 11)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_vv34o"]
+a = Vector2(195, 39)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_ao6v2"]
+a = Vector2(150, -12)
+b = Vector2(-2, -4)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_0hofu"]
+b = Vector2(150, -30)
+
+[node name="Phase02" type="Node2D"]
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("1")
+centered = false
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(512, 743)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+shape = SubResource("SegmentShape2D_4wexp")
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(-20, 384)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("RectangleShape2D_side_wall")
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(1044, 384)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("RectangleShape2D_side_wall")
+
+[node name="Ceiling" type="StaticBody2D" parent="."]
+position = Vector2(512, -20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ceiling"]
+shape = SubResource("RectangleShape2D_ceiling")
+
+[node name="Jules" parent="." instance=ExtResource("2")]
+position = Vector2(184, 519)
+
+[node name="Macron" parent="." instance=ExtResource("3")]
+position = Vector2(80, 500)
+patrol_min_x = 40.0
+patrol_max_x = 980.0
+
+[node name="Trump" parent="." instance=ExtResource("4")]
+position = Vector2(920, 650)
+patrol_min_x = 40.0
+patrol_max_x = 980.0
+
+[node name="shell01" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="shell01"]
+position = Vector2(-6, 414)
+shape = SubResource("SegmentShape2D_xofld")
+
+[node name="shell02" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="shell02"]
+position = Vector2(-7, 295)
+shape = SubResource("SegmentShape2D_vv34o")
+
+[node name="shell03" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="shell03"]
+position = Vector2(258, 423)
+shape = SubResource("SegmentShape2D_ao6v2")
+
+[node name="shell04" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="shell04"]
+position = Vector2(261, 310)
+shape = SubResource("SegmentShape2D_0hofu")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("5")
+
+[node name="StoryIntro" parent="." instance=ExtResource("6")]
+
+[node name="RandomJulesAudio" type="Node" parent="."]
+script = ExtResource("7")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RandomJulesAudio"]
