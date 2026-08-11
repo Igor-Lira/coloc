@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Coloc Game"
-run/main_scene="res://scenes/levels/phase02.tscn"
+run/main_scene="res://scenes/ui/main_menu.tscn"
 config/features=PackedStringArray("4.0", "GL Compatibility")
 
 [display]

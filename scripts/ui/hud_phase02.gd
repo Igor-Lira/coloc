@@ -203,7 +203,8 @@ func _process(delta: float) -> void:
 		_end_game("GAME OVER")
 	elif _enemies.size() > 0 and not any_alive:
 		_countdown_active = false
-		_end_game("CONGRATULATIONS!")
+		# Cleared Jules' phase — on to Florian's instead of back to the menu.
+		_end_game("CONGRATULATIONS!", "res://scenes/levels/phase01.tscn")
 
 
 func _format_time(t: float) -> String:
@@ -211,9 +212,9 @@ func _format_time(t: float) -> String:
 	return "%d:%02d" % [total_sec / 60, total_sec % 60]
 
 
-func _end_game(text: String) -> void:
+func _end_game(text: String, next_scene: String = "res://scenes/ui/main_menu.tscn") -> void:
 	_game_ended = true
 	_end_label.text = text
 	_end_overlay.visible = true
 	await get_tree().create_timer(2.5).timeout
-	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+	get_tree().change_scene_to_file(next_scene)

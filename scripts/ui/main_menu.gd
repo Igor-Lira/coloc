@@ -5,6 +5,10 @@ const FAREWAY_TEX := "res://assets/characters/florian/fareway.jpeg"
 const TURBO_TEX := "res://assets/characters/florian/turbo.png"
 const FLORIAN_IDLE_TEX := "res://assets/characters/florian/idle/frame_00.png"
 
+const KATANA_TEX := "res://assets/characters/jules/fight/frame_05.png"
+const VOCALOID_TEX := "res://assets/characters/jules/vocaloid.png"
+const JULES_IDLE_TEX := "res://assets/characters/jules/idle/frame_01.png"
+
 const GOLD := Color(1.0, 0.82, 0.25)
 const CYAN := Color(0.35, 0.85, 1.0)
 
@@ -107,14 +111,14 @@ func _build_main_menu() -> VBoxContainer:
 	box.add_child(title)
 
 	var start_button := Button.new()
-	start_button.text = "▶  Start Game"
+	start_button.text = ">  Start Game"
 	start_button.custom_minimum_size = Vector2(240, 56)
 	start_button.pressed.connect(_on_start_pressed)
 	_style_button(start_button, Color(0.2, 0.75, 0.35))
 	box.add_child(start_button)
 
 	var characters_button := Button.new()
-	characters_button.text = "★  Characters"
+	characters_button.text = "*  Les colocataires"
 	characters_button.custom_minimum_size = Vector2(240, 56)
 	characters_button.pressed.connect(_on_characters_pressed)
 	_style_button(characters_button, CYAN)
@@ -144,11 +148,11 @@ func _build_characters_screen() -> VBoxContainer:
 	box.add_child(row)
 
 	row.add_child(_build_florian_card())
-	row.add_child(_build_coming_soon_card("Igor", "🔧 bricole des trucs, on sait pas trop quoi"))
-	row.add_child(_build_coming_soon_card("Jules", "🛋️ toujours sur le canapé, jamais prêt"))
+	row.add_child(_build_jules_card())
+	row.add_child(_build_coming_soon_card("Igor", "bricole des trucs, on sait pas trop quoi"))
 
 	var back_button := Button.new()
-	back_button.text = "←  Back"
+	back_button.text = "<  Back"
 	back_button.custom_minimum_size = Vector2(160, 48)
 	back_button.pressed.connect(_on_back_pressed)
 	_style_button(back_button, Color(0.8, 0.3, 0.3))
@@ -182,8 +186,40 @@ func _build_florian_card() -> PanelContainer:
 	box.add_child(_build_ability_row(DICE_TEX, "Q", "lance un dé (dégâts à distance)"))
 	box.add_child(_build_ability_row(FAREWAY_TEX, "W", "fareway — météore qui explose"))
 	box.add_child(_build_ability_row(TURBO_TEX, "E", "pilote un robot : vitesse + bouclier"))
-	box.add_child(_build_text_only_row("→→", "dash"))
-	box.add_child(_build_text_only_row("↑↑", "double saut"))
+	box.add_child(_build_text_only_row("->->", "dash"))
+	box.add_child(_build_text_only_row("^^", "double saut"))
+
+	_add_hover_bounce(panel)
+	return panel
+
+
+func _build_jules_card() -> PanelContainer:
+	var card_size := Vector2(320, 430)
+	var panel := _make_card_panel(card_size, CYAN)
+
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 6)
+	panel.add_child(box)
+
+	var name_label := Label.new()
+	name_label.text = "Jules"
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_punch_label(name_label, 24, CYAN)
+	box.add_child(name_label)
+
+	var portrait := _make_icon(JULES_IDLE_TEX, Vector2(70, 112))
+	var portrait_row := CenterContainer.new()
+	portrait_row.add_child(portrait)
+	box.add_child(portrait_row)
+
+	var sep := HSeparator.new()
+	box.add_child(sep)
+
+	box.add_child(_build_ability_row(KATANA_TEX, "Q", "lance un katana (dégâts à distance)"))
+	box.add_child(_build_ability_row(VOCALOID_TEX, "W", "vocaloid — explose et repousse les ennemis"))
+	box.add_child(_build_ability_row(KATANA_TEX, "E", "envoie 6 katanas en éventail"))
+	box.add_child(_build_text_only_row("->->", "dash"))
+	box.add_child(_build_text_only_row("^^", "double saut"))
 
 	_add_hover_bounce(panel)
 	return panel
@@ -247,9 +283,10 @@ func _build_coming_soon_card(character_name: String, joke: String) -> PanelConta
 	panel.add_child(box)
 
 	var lock_label := Label.new()
-	lock_label.text = "🔒"
+	lock_label.text = "LOCKED"
 	lock_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	lock_label.add_theme_font_size_override("font_size", 48)
+	lock_label.add_theme_font_size_override("font_size", 22)
+	lock_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.65))
 	box.add_child(lock_label)
 
 	var name_label := Label.new()
@@ -300,7 +337,8 @@ func _make_card_panel(card_size: Vector2, accent: Color) -> PanelContainer:
 # ---------------------------------------------------------------------------
 
 func _on_start_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/levels/phase01.tscn")
+	# Campaign order: Jules' phase first, then Florian's if it's cleared.
+	get_tree().change_scene_to_file("res://scenes/levels/phase02.tscn")
 
 
 func _on_characters_pressed() -> void:
